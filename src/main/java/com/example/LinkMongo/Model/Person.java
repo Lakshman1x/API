@@ -1,5 +1,8 @@
 package com.example.LinkMongo.Model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -11,8 +14,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Person {
 
     @Id
+    @NotNull(message = "First name cant be null")
+    @NotBlank(message = "First name not be blank")
+    @Size(min = 3, max = 25)
     private String firstName;
 
+    @NotNull(message = "Last name cant be null")
+    @NotBlank(message = "Last not be blank")
+    @Size(min = 3, max = 25)
     private String lastName;
 
     public Person (String firstName, String lastName){
