@@ -1,6 +1,8 @@
 package com.example.LinkMongo.Controller;
 
-import com.example.LinkMongo.Model.Person;
+import com.example.LinkMongo.Model.Dto.UserInput;
+import com.example.LinkMongo.Model.Pojo.Person;
+import com.example.LinkMongo.Model.Dto.Response;
 import com.example.LinkMongo.Repo.PersonRepo;
 import com.example.LinkMongo.Services.PersonServices;
 import jakarta.validation.Valid;
@@ -9,73 +11,104 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import com.example.LinkMongo.Services.Validator;
 
 
 @RestController
 @RequestMapping("/")
-
-public class PersonController {
+public class PersonController implements  Controller{
     private static final Logger logger = LogManager.getLogger(PersonController.class);
-    @Autowired
     PersonRepo repo;
+    PersonServices services;
 
     @Autowired
-    PersonServices services;
+    PersonController(PersonRepo repo, PersonServices services){
+        this.repo=repo;
+        this.services=services;
+    }
+
 
     @GetMapping("list")
     public  ResponseEntity<List<Person>> getList(){
+
+        logger.info("List of persons retrieved");
         return  new ResponseEntity<>(repo.findAll(),HttpStatus.OK);
     }
 
 
     @GetMapping("get/{name}")
-    public ResponseEntity<?>getPerson(@PathVariable("name") String name) {
-        Person person =services.getPerson(name);
-        if(person!=null){
-            logger.info(name+" info retrieved");
-            return  new ResponseEntity<>(person,HttpStatus.OK);
+    public ResponseEntity<?> getPerson(@PathVariable("name") String name) {
+        Person person = services.getPerson(name);
+        if (person != null) {
+            logger.info("{} info retrieved", name);
+            return new ResponseEntity<>(person, HttpStatus.OK);
         }
-        logger.info(name+"Person not found in database");
-        return  new ResponseEntity<>("Person not found in database",HttpStatus.NOT_FOUND);
+        logger.info("Person {} not found in database", name);
+        return new ResponseEntity<>(new Response(false,"Person not found in database"),HttpStatus.BAD_REQUEST);
     }
-
 
     @PostMapping("add")
-    public  ResponseEntity<?> addPerson(@RequestBody @Valid Person userInput) {
-        Person person= services.addPerson(userInput);
-        if(person==null){
-            logger.info(userInput.getFirstName()+" Person already exists in the database ");
-            return  new ResponseEntity<>("Person already exists in the database",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Response> addPerson(@RequestBody @Valid UserInput userInput, BindingResult result) {
+        Response res = Validator.getResponse(result);
+        if(res.getStatus()){
+            Person person = services.addPerson(userInput);
+            if(person==null){
+                res.setStatus(false);
+                logger.info("Person already exists in the database");
+                res.setMessage("Person already exists in the database");
+                new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+            }else{
+                logger.info("Person added to the database");
+                res.setMessage("Person added to the database");
+            }
         }
-        logger.info(person.getFirstName()+" Person added to database");
-        return new ResponseEntity<>(person,HttpStatus.OK);
+            return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
     }
+
 
 
     @PutMapping("update")
-    public ResponseEntity<?> updatePerson(@RequestBody @Valid Person userInput){
-        Person person = services.updatePerson(userInput);
-        if(person!=null){
-            logger.info(person.getFirstName()+" information updated");
-            return  new ResponseEntity<>(person,HttpStatus.OK);
+    public ResponseEntity<Response> updatePerson(@RequestBody @Valid UserInput userInput, BindingResult result ) {
+        Response res = Validator.getResponse(result);
+        if(res.getStatus()){
+            Person person = services.updatePerson(userInput);
+            if (person != null) {
+                logger.info("{} information updated", person.getFirstName());
+                res.setMessage("Details updated");
+                return new ResponseEntity<>(res, HttpStatus.OK);
+            }else{
+                logger.info("Person {} not found in database", userInput.getFirstName());
+                res.setMessage("Person "+ userInput.getFirstName() +" not found in database");
+                res.setStatus(false);
+                return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+            }
         }
-        logger.info("Person "+userInput.getFirstName()+" not found in database");
-        return  new ResponseEntity<>("Person does not exist in the database",HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
     }
 
 
+
     @DeleteMapping("delete")
-    public ResponseEntity<?> deletePerson(@RequestBody @Valid Person userInput){
-        Boolean result =services.deletePerson(userInput);
-        if(result){logger.info("Person "+userInput.getFirstName()+" information deleted");
-            return new ResponseEntity<>("User delete",HttpStatus.OK);
-        }else{
-            logger.info("Person "+userInput.getFirstName()+" does not exist");
-          return new ResponseEntity<>("Person does not exist",HttpStatus.NOT_FOUND);
+    public ResponseEntity<Response> deletePerson(@RequestBody @Valid UserInput userInput, BindingResult result) {
+        Response res= Validator.getResponse(result);
+        if(res.getStatus()){
+            boolean delete = services.deletePerson(userInput);
+            if(delete){
+                logger.info("{} information deleted", userInput.getFirstName());
+                res.setMessage("Details deleted");
+                return new ResponseEntity<>(res, HttpStatus.OK);
+            }else{
+                logger.info("Person {} does not exist", userInput.getFirstName());
+                res.setMessage("Person does not exist");
+                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+            }
         }
 
+        return  new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
     }
 
 

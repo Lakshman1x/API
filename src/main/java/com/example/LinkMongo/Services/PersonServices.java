@@ -1,53 +1,58 @@
 package com.example.LinkMongo.Services;
 
-import com.example.LinkMongo.Controller.PersonController;
-import com.example.LinkMongo.Model.Person;
+import com.example.LinkMongo.Model.Dto.UserInput;
+import com.example.LinkMongo.Model.Pojo.Person;
 import com.example.LinkMongo.Repo.PersonRepo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.swing.text.html.Option;
+
+import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 @Service
-public class PersonServices {
+public class PersonServices implements ServiceInterface {
 
-    @Autowired
     PersonRepo repo;
-    public Person getPerson(@PathVariable("name") String name) {
+    @Autowired
+    PersonServices(PersonRepo repo){
+        this.repo=repo;
+    }
+    public Person getPerson(String name) {
         Optional<Person> res= repo.findById(name);
 
         return res.orElse(null);
     }
 
-    public  Person addPerson(Person person){
+    public  Person addPerson(UserInput person){
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
         if(existingPerson.isPresent()){
 
             return null;
         }
-        return repo.insert(person);
+        return repo.insert(convertToPerson(person));
     }
 
 
-    public  Person updatePerson(Person person){
+    public  Person updatePerson(UserInput person){
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
         if(existingPerson.isPresent()){
-            return repo.save(person);
+            return repo.save(convertToPerson(person));
         }
         return  null;
     }
 
-    public Boolean deletePerson(Person person){
+    public Boolean deletePerson(UserInput person){
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
-        if(existingPerson.isPresent() && existingPerson.get().equals(person)){
-            repo.delete(person);
+        if(existingPerson.isPresent() && existingPerson.get().equals(convertToPerson(person))){
+            repo.delete(convertToPerson(person));
             return true;
         }
         return  false;
+    }
+
+    private Person convertToPerson(UserInput input){
+        return new Person(input.getFirstName(),input.getLastName());
     }
 
 }
