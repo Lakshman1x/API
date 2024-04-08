@@ -33,7 +33,6 @@ public class PersonController implements  Controller{
 
     @GetMapping("list")
     public  ResponseEntity<List<Person>> getList(){
-
         logger.info("List of persons retrieved");
         return  new ResponseEntity<>(repo.findAll(),HttpStatus.OK);
     }
