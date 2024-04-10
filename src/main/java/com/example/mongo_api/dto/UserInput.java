@@ -1,4 +1,4 @@
-package com.example.LinkMongo.Model.Dto;
+package com.example.mongo_api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
-package com.example.LinkMongo.Repo;
+package com.example.mongo_api.repo;
 
-import com.example.LinkMongo.Model.Pojo.Person;
+import com.example.mongo_api.Model.Person;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

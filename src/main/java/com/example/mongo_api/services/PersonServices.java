@@ -1,13 +1,10 @@
-package com.example.LinkMongo.Services;
+package com.example.mongo_api.services;
 
-import com.example.LinkMongo.Model.Dto.UserInput;
-import com.example.LinkMongo.Model.Pojo.Person;
-import com.example.LinkMongo.Repo.PersonRepo;
+import com.example.mongo_api.dto.UserInput;
+import com.example.mongo_api.Model.Person;
+import com.example.mongo_api.repo.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 @Service

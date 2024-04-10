@@ -1,4 +1,4 @@
-package com.example.LinkMongo.Model.Pojo;
+package com.example.mongo_api.Model;
 
 
 import lombok.NoArgsConstructor;

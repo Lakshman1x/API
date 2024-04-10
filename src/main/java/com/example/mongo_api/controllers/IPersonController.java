@@ -1,11 +1,12 @@
-package com.example.LinkMongo.Controller;
+package com.example.mongo_api.controllers;
 
-import com.example.LinkMongo.Model.Dto.UserInput;
-import com.example.LinkMongo.Model.Pojo.Person;
-import com.example.LinkMongo.Model.Dto.Response;
-import com.example.LinkMongo.Repo.PersonRepo;
-import com.example.LinkMongo.Services.PersonServices;
+import com.example.mongo_api.dto.UserInput;
+import com.example.mongo_api.Model.Person;
+import com.example.mongo_api.util.Response;
+import com.example.mongo_api.repo.PersonRepo;
+import com.example.mongo_api.services.PersonServices;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import com.example.LinkMongo.Services.Validator;
-
-
+import com.example.mongo_api.util.Validator;
 @RestController
 @RequestMapping("/")
-public class PersonController implements  Controller{
-    private static final Logger logger = LogManager.getLogger(PersonController.class);
+public class IPersonController implements  Controller{
+    private static final Logger logger = LogManager.getLogger(IPersonController.class);
     PersonRepo repo;
     PersonServices services;
 
     @Autowired
-    PersonController(PersonRepo repo, PersonServices services){
+    IPersonController(PersonRepo repo, PersonServices services){
         this.repo=repo;
         this.services=services;
     }
@@ -36,7 +35,6 @@ public class PersonController implements  Controller{
         logger.info("List of persons retrieved");
         return  new ResponseEntity<>(repo.findAll(),HttpStatus.OK);
     }
-
 
     @GetMapping("get/{name}")
     public ResponseEntity<?> getPerson(@PathVariable("name") String name) {

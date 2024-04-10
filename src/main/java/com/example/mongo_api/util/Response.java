@@ -1,11 +1,11 @@
-package com.example.LinkMongo.Model.Dto;
+package com.example.mongo_api.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Response {
     private boolean status;
-    private String message;
+    private String message="";
     private String dateTimeStamp;
 
     public Response(boolean status,String message){
@@ -17,6 +17,8 @@ public class Response {
     public Response(){setDateTimeStamp();}
     public void setStatus(boolean status){this.status=status;}
     public  void setMessage(String message){this.message=message;}
+
+    public void appendMessage(String msg){this.message=this.message+msg+", ";}
 
     private void setDateTimeStamp(){
         Date date = new Date();

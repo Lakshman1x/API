@@ -1,7 +1,7 @@
-package com.example.LinkMongo.Services;
+package com.example.mongo_api.services;
 
-import com.example.LinkMongo.Model.Dto.UserInput;
-import com.example.LinkMongo.Model.Pojo.Person;
+import com.example.mongo_api.dto.UserInput;
+import com.example.mongo_api.Model.Person;
 
 public interface ServiceInterface {
     Person getPerson(String name);

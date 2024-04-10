@@ -1,8 +1,8 @@
-package com.example.LinkMongo.Controller;
+package com.example.mongo_api.controllers;
 
-import com.example.LinkMongo.Model.Dto.Response;
-import com.example.LinkMongo.Model.Dto.UserInput;
-import com.example.LinkMongo.Model.Pojo.Person;
+import com.example.mongo_api.util.Response;
+import com.example.mongo_api.dto.UserInput;
+import com.example.mongo_api.Model.Person;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
