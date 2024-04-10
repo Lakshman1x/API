@@ -1,8 +1,8 @@
 package com.example.mongo_api.controllers;
 
-import com.example.mongo_api.util.Response;
 import com.example.mongo_api.dto.UserInput;
 import com.example.mongo_api.Model.Person;
+import com.example.mongo_api.util.Response;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

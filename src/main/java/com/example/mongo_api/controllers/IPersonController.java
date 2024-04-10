@@ -6,7 +6,6 @@ import com.example.mongo_api.util.Response;
 import com.example.mongo_api.repo.PersonRepo;
 import com.example.mongo_api.services.PersonServices;
 import jakarta.validation.Valid;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

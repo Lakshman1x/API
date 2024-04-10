@@ -8,7 +8,7 @@ import org.springframework.validation.FieldError;
 public class Validator {
     private static final Logger logger = LogManager.getLogger(Validator.class);
     public static Response getResponse(BindingResult bind){
-        Response res= new Response();
+        Response res = new Response();
         if(bind.hasErrors()){
             for(FieldError err : bind.getFieldErrors()){
                 logger.warn(err.getDefaultMessage());

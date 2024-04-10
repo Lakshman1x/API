@@ -8,7 +8,7 @@ public class Response {
     private String message="";
     private String dateTimeStamp;
 
-    public Response(boolean status,String message){
+    public Response(boolean status, String message){
         this.status=status;
         this.message=message;
         setDateTimeStamp();
