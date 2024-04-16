@@ -14,10 +14,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(PersonNotInDbException.class)
+    public ResponseEntity<Response> handlePersonNotInDbException() {
+        Response response = new Response(false, "Person not found in database");
+        logger.warn("Person not found in database");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Response> handleValidationException(ValidationException ex){
-        Response response = new Response(false,"Validation error : ");
-        for(FieldError err : ex.getBindingResult().getFieldErrors()){
+    public ResponseEntity<Response> handleValidationException(ValidationException ex) {
+        Response response = new Response(false, "Validation error : ");
+        for (FieldError err : ex.getBindingResult().getFieldErrors()) {
             response.appendMessage(err.getDefaultMessage());
             logger.warn(err.getDefaultMessage());
         }

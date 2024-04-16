@@ -5,49 +5,52 @@ import com.example.mongo_api.entity.Person;
 import com.example.mongo_api.repo.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
 public class PersonServicesImpl implements IPersonService {
 
     PersonRepo repo;
+
     @Autowired
-    PersonServicesImpl(PersonRepo repo){
-        this.repo=repo;
+    PersonServicesImpl(PersonRepo repo) {
+        this.repo = repo;
     }
+
     public Optional<Person> getPerson(String name) {
         return repo.findById(name);
 
     }
 
-    public  Person addPerson(PersonInfoDto person){
+    public Person addPerson(PersonInfoDto person) {
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
-        if(existingPerson.isPresent()){
+        if (existingPerson.isPresent()) {
             return null;
         }
         return repo.insert(convertToPerson(person));
     }
 
 
-    public  Person updatePerson(PersonInfoDto person){
+    public Person updatePerson(PersonInfoDto person) {
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
-        if(existingPerson.isPresent()){
+        if (existingPerson.isPresent()) {
             return repo.save(convertToPerson(person));
         }
-        return  null;
+        return null;
     }
 
-    public Boolean deletePerson(PersonInfoDto person){
+    public Boolean deletePerson(PersonInfoDto person) {
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
-        if(existingPerson.isPresent() && existingPerson.get().equals(convertToPerson(person))){
+        if (existingPerson.isPresent() && existingPerson.get().equalsPerson(convertToPerson(person))) {
             repo.delete(convertToPerson(person));
             return true;
         }
-        return  false;
+        return false;
     }
 
-    private Person convertToPerson(PersonInfoDto input){
-        return new Person(input.getFirstName(),input.getLastName());
+    private Person convertToPerson(PersonInfoDto input) {
+        return new Person(input.getFirstName(), input.getLastName());
     }
 
 }

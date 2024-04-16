@@ -1,25 +1,23 @@
 package com.example.mongo_api.entity;
 
 
-import lombok.NoArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="Person")
-@NoArgsConstructor
+@Document(collection = "Person")
 @Data
 public class Person {
 
     @Id
-    private String firstName;
+    private final String firstName;
 
 
-    private String lastName;
+    private final String lastName;
 
-    public Person (String firstName, String lastName){
-        this.firstName=firstName;
-        this.lastName=lastName;
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getFirstName() {
@@ -27,8 +25,7 @@ public class Person {
     }
 
 
-
-    public boolean equals(Person obj) {
+    public boolean equalsPerson(Person obj) {
         return this.firstName.equals(obj.firstName) && this.lastName.equals(obj.lastName);
     }
 

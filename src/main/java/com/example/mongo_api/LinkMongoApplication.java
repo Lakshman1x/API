@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LinkMongoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LinkMongoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(LinkMongoApplication.class, args);
+    }
 
 }
