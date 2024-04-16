@@ -1,11 +1,12 @@
 package com.example.mongo_api.controllers;
 
-import com.example.mongo_api.dto.UserInput;
-import com.example.mongo_api.Model.Person;
-import com.example.mongo_api.util.Response;
+import com.example.mongo_api.dto.PersonInfoDto;
+import com.example.mongo_api.entity.Person;
+import com.example.mongo_api.dto.Response;
 import com.example.mongo_api.repo.PersonRepo;
-import com.example.mongo_api.services.PersonServices;
+import com.example.mongo_api.services.PersonServicesImpl;
 import jakarta.validation.Valid;
+import com.example.mongo_api.exception_handler.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +15,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 import com.example.mongo_api.util.Validator;
+
+
 @RestController
 @RequestMapping("/")
-public class IPersonController implements  Controller{
-    private static final Logger logger = LogManager.getLogger(IPersonController.class);
+public class PersonControllerImpl implements IController {
+    private static final Logger logger = LogManager.getLogger(PersonControllerImpl.class);
     PersonRepo repo;
-    PersonServices services;
+    PersonServicesImpl services;
 
     @Autowired
-    IPersonController(PersonRepo repo, PersonServices services){
+    PersonControllerImpl(PersonRepo repo, PersonServicesImpl services){
         this.repo=repo;
         this.services=services;
     }
@@ -37,8 +41,8 @@ public class IPersonController implements  Controller{
 
     @GetMapping("get/{name}")
     public ResponseEntity<?> getPerson(@PathVariable("name") String name) {
-        Person person = services.getPerson(name);
-        if (person != null) {
+        Optional<Person> person = services.getPerson(name);
+        if (person.isPresent()) {
             logger.info("{} info retrieved", name);
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
@@ -47,8 +51,8 @@ public class IPersonController implements  Controller{
     }
 
     @PostMapping("add")
-    public ResponseEntity<Response> addPerson(@RequestBody @Valid UserInput userInput, BindingResult result) {
-        Response res = Validator.getResponse(result);
+    public ResponseEntity<Response> addPerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException {
+        Response res = Validator.validate(result);
         if(res.getStatus()){
             Person person = services.addPerson(userInput);
             if(person==null){
@@ -67,8 +71,8 @@ public class IPersonController implements  Controller{
 
 
     @PutMapping("update")
-    public ResponseEntity<Response> updatePerson(@RequestBody @Valid UserInput userInput, BindingResult result ) {
-        Response res = Validator.getResponse(result);
+    public ResponseEntity<Response> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result ) throws ValidationException{
+        Response res = Validator.validate(result);
         if(res.getStatus()){
             Person person = services.updatePerson(userInput);
             if (person != null) {
@@ -89,23 +93,24 @@ public class IPersonController implements  Controller{
 
 
     @DeleteMapping("delete")
-    public ResponseEntity<Response> deletePerson(@RequestBody @Valid UserInput userInput, BindingResult result) {
-        Response res= Validator.getResponse(result);
-        if(res.getStatus()){
-            boolean delete = services.deletePerson(userInput);
-            if(delete){
-                logger.info("{} information deleted", userInput.getFirstName());
-                res.setMessage("Details deleted");
-                return new ResponseEntity<>(res, HttpStatus.OK);
-            }else{
-                logger.info("Person {} does not exist", userInput.getFirstName());
-                res.setMessage("Person does not exist");
-                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
-            }
+    public ResponseEntity<Response> deletePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException{
+        Response res= Validator.validate(result);
+        if(!res.getStatus()){
+            logger.warn("Validation error");
+            return  new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
         }
 
-        return  new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
-    }
+        boolean delete = services.deletePerson(userInput);
+        if(delete){
+            logger.info("{} information deleted", userInput.getFirstName());
+            res.setMessage("Details deleted");
+            return new ResponseEntity<>(res, HttpStatus.NO_CONTENT);
+        }else{
+            logger.warn("Person {} does not exist", userInput.getFirstName());
+            res.setMessage("Person does not exist");
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        }
 
+    }
 
 }

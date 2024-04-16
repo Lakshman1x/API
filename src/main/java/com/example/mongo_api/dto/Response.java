@@ -1,24 +1,37 @@
-package com.example.mongo_api.util;
+package com.example.mongo_api.dto;
+
+import jakarta.validation.constraints.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Response {
     private boolean status;
-    private String message="";
+    private String message;
     private String dateTimeStamp;
 
     public Response(boolean status, String message){
+        this();
         this.status=status;
-        this.message=message;
-        setDateTimeStamp();
+        if(!Objects.isNull(message)){
+            this.message=message;
+        }
+
     }
 
-    public Response(){setDateTimeStamp();}
+    public Response(){
+        this.message="";
+        setDateTimeStamp();}
+
     public void setStatus(boolean status){this.status=status;}
     public  void setMessage(String message){this.message=message;}
 
-    public void appendMessage(String msg){this.message=this.message+msg+", ";}
+    public void appendMessage(String msg){
+//        if(this.message==null){this.message="";}
+        this.message=this.message+msg+", ";
+    }
+
 
     private void setDateTimeStamp(){
         Date date = new Date();

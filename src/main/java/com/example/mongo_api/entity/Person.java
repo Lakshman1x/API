@@ -1,4 +1,4 @@
-package com.example.mongo_api.Model;
+package com.example.mongo_api.entity;
 
 
 import lombok.NoArgsConstructor;

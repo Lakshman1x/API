@@ -1,37 +1,35 @@
 package com.example.mongo_api.services;
 
-import com.example.mongo_api.dto.UserInput;
-import com.example.mongo_api.Model.Person;
+import com.example.mongo_api.dto.PersonInfoDto;
+import com.example.mongo_api.entity.Person;
 import com.example.mongo_api.repo.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class PersonServices implements ServiceInterface {
+public class PersonServicesImpl implements IPersonService {
 
     PersonRepo repo;
     @Autowired
-    PersonServices(PersonRepo repo){
+    PersonServicesImpl(PersonRepo repo){
         this.repo=repo;
     }
-    public Person getPerson(String name) {
-        Optional<Person> res= repo.findById(name);
+    public Optional<Person> getPerson(String name) {
+        return repo.findById(name);
 
-        return res.orElse(null);
     }
 
-    public  Person addPerson(UserInput person){
+    public  Person addPerson(PersonInfoDto person){
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
         if(existingPerson.isPresent()){
-
             return null;
         }
         return repo.insert(convertToPerson(person));
     }
 
 
-    public  Person updatePerson(UserInput person){
+    public  Person updatePerson(PersonInfoDto person){
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
         if(existingPerson.isPresent()){
             return repo.save(convertToPerson(person));
@@ -39,7 +37,7 @@ public class PersonServices implements ServiceInterface {
         return  null;
     }
 
-    public Boolean deletePerson(UserInput person){
+    public Boolean deletePerson(PersonInfoDto person){
         Optional<Person> existingPerson = repo.findById(person.getFirstName());
         if(existingPerson.isPresent() && existingPerson.get().equals(convertToPerson(person))){
             repo.delete(convertToPerson(person));
@@ -48,7 +46,7 @@ public class PersonServices implements ServiceInterface {
         return  false;
     }
 
-    private Person convertToPerson(UserInput input){
+    private Person convertToPerson(PersonInfoDto input){
         return new Person(input.getFirstName(),input.getLastName());
     }
 
