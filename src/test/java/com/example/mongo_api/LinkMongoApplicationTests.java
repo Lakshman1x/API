@@ -35,8 +35,9 @@ class LinkMongoApplicationTests {
 
 	@Test
 	void testDeletePerson() throws MongoAPIException{
+		service.deletePerson(new PersonInfoDto("testMail12@domain.com","updatedTestName","updatedLastName"));
 		Assertions.assertThrows(MongoAPIException.class, () -> {
-			service.deletePerson(new PersonInfoDto("testMail12@domain.com", "updatedTestName", "updatedLastName"));
+			service.getPerson("testMail12@domain.com");
 		});
 	}
 }
