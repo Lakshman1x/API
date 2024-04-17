@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Response> handleValidationException(ValidationException ex) {
-        Response response = new Response(400, "Validation error : ");
+        Response response = new Response(HttpStatus.BAD_REQUEST, "Validation error : ");
         for (FieldError err : ex.getBindingResult().getFieldErrors()) {
             response.appendMessage(err.getDefaultMessage());
             logger.warn(err.getDefaultMessage());
@@ -34,13 +34,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MongoException.class)
     public ResponseEntity<Response> handleMongoException(MongoException ex) {
 
-        Response response = new Response(500, "MongoDB error occurred");
+        Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR, "MongoDB error occurred");
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response> handleException(Exception ex) {
-        Response response = new Response(500, "An unexpected error occurred");
+        Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

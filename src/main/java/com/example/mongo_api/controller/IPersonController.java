@@ -16,13 +16,13 @@ import java.util.List;
 public interface IPersonController {
     ResponseEntity<List<PersonEntity>> getList();
 
-    ResponseEntity<PersonEntity> getPerson(@PathVariable("name") String name) throws MongoAPIException;
+    ResponseEntity<PersonInfoDto> getPerson(@PathVariable("name") String name) throws MongoAPIException;
 
     ResponseEntity<Response> addPerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
 
     ResponseEntity<Response> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
 
-    ResponseEntity<Response> deletePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
+    ResponseEntity<Response> deletePerson(String mail) throws ValidationException, MongoAPIException;
 
 
 }

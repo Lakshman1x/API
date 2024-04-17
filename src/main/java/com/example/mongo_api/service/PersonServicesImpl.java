@@ -5,7 +5,9 @@ import com.example.mongo_api.entity.PersonEntity;
 import com.example.mongo_api.exception_handler.MongoAPIException;
 import com.example.mongo_api.repo.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -23,35 +25,36 @@ public class PersonServicesImpl implements IPersonService {
 
     }
 
-    public PersonEntity addPerson(PersonInfoDto person) throws MongoAPIException {
+    public void addPerson(PersonInfoDto person) throws MongoAPIException {
         try {
-            return personRepository.insert(convertToPerson(person));
+            personRepository.insert(convertToPerson(person));
         } catch (Exception e) {
-            throw new MongoAPIException(400, "Person with same email already exists");
+            throw new MongoAPIException(HttpStatus.BAD_REQUEST, "Person with same email already exists");
         }
     }
 
 
-
-    public PersonEntity updatePerson(PersonInfoDto person) throws MongoAPIException {
+    public void updatePerson(PersonInfoDto person) throws MongoAPIException {
         Optional<PersonEntity> existingPerson = personRepository.findById(person.getEmail());
         if (existingPerson.isPresent()) {
-            return personRepository.save(convertToPerson(person));
+            personRepository.save(convertToPerson(person));
+
+            return;
         }
-        throw new MongoAPIException(400,"Person does not exist in the database");
+        throw new MongoAPIException(HttpStatus.NOT_MODIFIED, "Not updated, Person not found in the database, ");
     }
 
-    public Boolean deletePerson(PersonInfoDto person) throws MongoAPIException {
-        Optional<PersonEntity> existingPerson = personRepository.findById(person.getEmail());
-        if (existingPerson.isPresent() && existingPerson.get().equals(convertToPerson(person))) {
-            personRepository.delete(convertToPerson(person));
-            return true;
+    public void deletePerson(String mail) throws MongoAPIException {
+        Optional<PersonEntity> existingPerson = personRepository.findById(mail);
+        if (existingPerson.isPresent()) {
+            personRepository.deleteById(mail);
+        } else {
+            throw new MongoAPIException(HttpStatus.NOT_FOUND, "No person with that email found");
         }
-        throw  new MongoAPIException(404,"Person not found in database");
     }
 
     private PersonEntity convertToPerson(PersonInfoDto input) {
-        return new PersonEntity(input.getEmail(),input.getFirstName(), input.getLastName());
+        return new PersonEntity(input.getEmail(), input.getFirstName(), input.getLastName());
     }
 
 }

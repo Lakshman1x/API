@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface IPersonService {
     Optional<PersonEntity> getPerson(String name);
 
-    PersonEntity addPerson(PersonInfoDto person) throws MongoAPIException;
+    void addPerson(PersonInfoDto person) throws MongoAPIException;
 
-    PersonEntity updatePerson(PersonInfoDto person) throws MongoAPIException;
+    void updatePerson(PersonInfoDto person) throws MongoAPIException;
 
-    Boolean deletePerson(PersonInfoDto person) throws MongoAPIException;
+    void deletePerson(String mail) throws MongoAPIException;
 
 
 }

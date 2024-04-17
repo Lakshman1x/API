@@ -13,31 +13,38 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class LinkMongoApplicationTests {
 
-	@Autowired
-	PersonServicesImpl service;
-	@Test
-	void testAddPerson() throws MongoAPIException {
-		service.addPerson(new PersonInfoDto("testMail12@domain.com","FirstNameTest","LastNameTest"));
-		PersonEntity person =service.getPerson("testMail12@domain.com").get();
-		Assertions.assertEquals("testMail12@domain.com",person.getEmail());
-	}
+    private final String testMail = "testMail12@domain.com";
+    private final String testFirstName = "testFirstName";
+    private final String testLastName = "testLastName";
 
-	@Test
-	void testGetPerson() throws MongoAPIException{
-		Assertions.assertEquals(service.getPerson("testMail12@domain.com").get(),new PersonEntity("testMail12@domain.com","FirstNameTest","LastNameTest"));
-	}
+    private final String testUpdatedFirstName = "updatedTestName";
 
-	@Test
-	void testUpdatePerson() throws MongoAPIException {
-		service.updatePerson(new PersonInfoDto("testMail12@domain.com","updatedTestName","updatedLastName"));
-		Assertions.assertEquals("updatedTestName",service.getPerson("testMail12@domain.com").get().getFirstName());
-	}
+    @Autowired
+    PersonServicesImpl service;
 
-	@Test
-	void testDeletePerson() throws MongoAPIException{
-		service.deletePerson(new PersonInfoDto("testMail12@domain.com","updatedTestName","updatedLastName"));
-		Assertions.assertThrows(MongoAPIException.class, () -> {
-			service.getPerson("testMail12@domain.com");
-		});
-	}
+    @Test
+    void testAddPerson() throws MongoAPIException {
+        service.addPerson(new PersonInfoDto(testMail, testFirstName, testLastName));
+        PersonEntity person = service.getPerson(testMail).get();
+        Assertions.assertEquals(testMail, person.getEmail());
+    }
+
+    @Test
+    void testGetPerson() throws MongoAPIException {
+        Assertions.assertEquals(service.getPerson(testMail).get(), new PersonEntity(testMail, testFirstName, testLastName));
+    }
+
+    @Test
+    void testUpdatePerson() throws MongoAPIException {
+        service.updatePerson(new PersonInfoDto(testMail, testUpdatedFirstName, testLastName));
+        Assertions.assertEquals(testUpdatedFirstName, service.getPerson(testMail).get().getFirstName());
+    }
+
+    @Test
+    void testDeletePerson() throws MongoAPIException {
+        service.deletePerson(testMail);
+        Assertions.assertThrows(MongoAPIException.class, () -> {
+            service.getPerson(testMail);
+        });
+    }
 }

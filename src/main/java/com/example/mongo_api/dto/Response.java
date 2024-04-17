@@ -1,16 +1,18 @@
 package com.example.mongo_api.dto;
 
 
+import org.springframework.http.HttpStatus;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
 public class Response {
-    private int status;
+    private HttpStatus status;
     private String message;
     private String dateTimeStamp;
 
-    public Response(int status, String message) {
+    public Response(HttpStatus status, String message) {
         this();
         this.status = status;
         if (!Objects.isNull(message)) {
@@ -46,11 +48,11 @@ public class Response {
         this.message = message;
     }
 
-    public int getStatus() {
+    public HttpStatus getStatus() {
         return this.status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(HttpStatus status) {
         this.status = status;
     }
 
