@@ -6,11 +6,11 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Response {
-    private boolean status;
+    private int status;
     private String message;
     private String dateTimeStamp;
 
-    public Response(boolean status, String message) {
+    public Response(int status, String message) {
         this();
         this.status = status;
         if (!Objects.isNull(message)) {
@@ -46,11 +46,11 @@ public class Response {
         this.message = message;
     }
 
-    public boolean getStatus() {
+    public int getStatus() {
         return this.status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
