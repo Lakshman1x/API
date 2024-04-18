@@ -1,8 +1,8 @@
-package com.example.mongo_api.service;
+package com.example.mongodb_api_project.service;
 
-import com.example.mongo_api.dto.PersonInfoDto;
-import com.example.mongo_api.entity.PersonEntity;
-import com.example.mongo_api.exception_handler.MongoAPIException;
+import com.example.mongodb_api_project.dto.PersonInfoDto;
+import com.example.mongodb_api_project.entity.PersonEntity;
+import com.example.mongodb_api_project.exception_handler.MongoAPIException;
 
 import java.util.Optional;
 

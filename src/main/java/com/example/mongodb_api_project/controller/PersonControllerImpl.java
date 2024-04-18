@@ -1,14 +1,14 @@
-package com.example.mongo_api.controller;
+package com.example.mongodb_api_project.controller;
 
-import com.example.mongo_api.dto.PersonInfoDto;
-import com.example.mongo_api.dto.Response;
-import com.example.mongo_api.entity.PersonEntity;
-import com.example.mongo_api.exception_handler.MongoAPIException;
-import com.example.mongo_api.exception_handler.ValidationException;
-import com.example.mongo_api.repo.PersonRepo;
-import com.example.mongo_api.service.IPersonService;
-import com.example.mongo_api.service.PersonServicesImpl;
-import com.example.mongo_api.util.Validator;
+import com.example.mongodb_api_project.dto.PersonInfoDto;
+import com.example.mongodb_api_project.dto.Response;
+import com.example.mongodb_api_project.entity.PersonEntity;
+import com.example.mongodb_api_project.exception_handler.MongoAPIException;
+import com.example.mongodb_api_project.exception_handler.ValidationException;
+import com.example.mongodb_api_project.repo.PersonRepo;
+import com.example.mongodb_api_project.service.IPersonService;
+import com.example.mongodb_api_project.service.PersonServicesImpl;
+import com.example.mongodb_api_project.util.Validator;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

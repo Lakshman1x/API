@@ -1,4 +1,4 @@
-package com.example.mongo_api.dto;
+package com.example.mongodb_api_project.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
-package com.example.mongo_api.exception_handler;
+package com.example.mongodb_api_project.exception_handler;
 
-import com.example.mongo_api.dto.Response;
+import com.example.mongodb_api_project.dto.Response;
 import com.mongodb.MongoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

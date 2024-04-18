@@ -1,4 +1,4 @@
-package com.example.mongo_api.exception_handler;
+package com.example.mongodb_api_project.exception_handler;
 
 import org.springframework.validation.BindingResult;
 

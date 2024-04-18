@@ -1,4 +1,4 @@
-package com.example.mongo_api.entity;
+package com.example.mongodb_api_project.entity;
 
 
 import lombok.Data;

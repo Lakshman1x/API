@@ -1,9 +1,9 @@
-package com.example.mongo_api.service;
+package com.example.mongodb_api_project.service;
 
-import com.example.mongo_api.dto.PersonInfoDto;
-import com.example.mongo_api.entity.PersonEntity;
-import com.example.mongo_api.exception_handler.MongoAPIException;
-import com.example.mongo_api.repo.PersonRepo;
+import com.example.mongodb_api_project.dto.PersonInfoDto;
+import com.example.mongodb_api_project.entity.PersonEntity;
+import com.example.mongodb_api_project.exception_handler.MongoAPIException;
+import com.example.mongodb_api_project.repo.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,11 +26,13 @@ public class PersonServicesImpl implements IPersonService {
     }
 
     public void addPerson(PersonInfoDto person) throws MongoAPIException {
-        try {
-            personRepository.insert(convertToPerson(person));
-        } catch (Exception e) {
+
+        if (!personRepository.existsById(person.getEmail())) {
+            personRepository.save(convertToPerson(person));
+        } else {
             throw new MongoAPIException(HttpStatus.BAD_REQUEST, "Person with same email already exists");
         }
+
     }
 
 

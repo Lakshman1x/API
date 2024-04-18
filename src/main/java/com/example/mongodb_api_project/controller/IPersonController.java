@@ -1,10 +1,10 @@
-package com.example.mongo_api.controller;
+package com.example.mongodb_api_project.controller;
 
-import com.example.mongo_api.dto.PersonInfoDto;
-import com.example.mongo_api.dto.Response;
-import com.example.mongo_api.entity.PersonEntity;
-import com.example.mongo_api.exception_handler.MongoAPIException;
-import com.example.mongo_api.exception_handler.ValidationException;
+import com.example.mongodb_api_project.dto.PersonInfoDto;
+import com.example.mongodb_api_project.dto.Response;
+import com.example.mongodb_api_project.entity.PersonEntity;
+import com.example.mongodb_api_project.exception_handler.MongoAPIException;
+import com.example.mongodb_api_project.exception_handler.ValidationException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
