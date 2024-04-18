@@ -1,6 +1,4 @@
 package com.example.mongodb_api_project.entity;
-
-
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,7 +17,6 @@ public class PersonEntity {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
 
     public String getFirstName() {
         return this.firstName;

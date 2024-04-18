@@ -5,7 +5,7 @@ import com.example.mongodb_api_project.dto.Response;
 import com.example.mongodb_api_project.entity.PersonEntity;
 import com.example.mongodb_api_project.exception_handler.MongoAPIException;
 import com.example.mongodb_api_project.exception_handler.ValidationException;
-import com.example.mongodb_api_project.repo.PersonRepo;
+import com.example.mongodb_api_project.repo.IPersonRepo;
 import com.example.mongodb_api_project.service.IPersonService;
 import com.example.mongodb_api_project.service.PersonServicesImpl;
 import com.example.mongodb_api_project.util.Validator;
@@ -26,17 +26,16 @@ import java.util.Optional;
 @RequestMapping("/v1/api/person")
 public class PersonControllerImpl implements IPersonController {
     private static final Logger logger = LogManager.getLogger(PersonControllerImpl.class);
-    private final PersonRepo personRepository;
+    private final IPersonRepo personRepository;
     private final IPersonService personService;
 
     @Autowired
-    PersonControllerImpl(PersonRepo repo, PersonServicesImpl services) {
+    PersonControllerImpl(IPersonRepo repo, PersonServicesImpl services) {
         this.personRepository = repo;
         this.personService = services;
     }
 
-
-    @GetMapping("list")
+    @GetMapping("/list")
     public ResponseEntity<List<PersonEntity>> getList() {
         return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
     }
@@ -51,7 +50,6 @@ public class PersonControllerImpl implements IPersonController {
         } else {
             throw new MongoAPIException(HttpStatus.NOT_FOUND, "Person not found in Db");
         }
-
     }
 
     @PostMapping()
@@ -60,9 +58,7 @@ public class PersonControllerImpl implements IPersonController {
         personService.addPerson(userInput);
         Response temp = new Response(HttpStatus.CREATED, "Person added to database");
         return new ResponseEntity<>(temp, HttpStatus.CREATED);
-
     }
-
 
     @PutMapping()
     public ResponseEntity<Response> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException {
@@ -72,12 +68,10 @@ public class PersonControllerImpl implements IPersonController {
         return new ResponseEntity<>(new Response(HttpStatus.OK, "Details updated"), HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{email}")
     public ResponseEntity<Response> deletePerson(@PathVariable String email) throws MongoAPIException {
         personService.deletePerson(email);
         logger.info("{} information deleted", email);
         return new ResponseEntity<>(new Response(HttpStatus.NO_CONTENT, "Person information deleted"), HttpStatus.OK);
-
     }
 }

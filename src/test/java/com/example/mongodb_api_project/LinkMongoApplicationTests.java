@@ -16,7 +16,6 @@ class LinkMongoApplicationTests {
     private final String testMail = "testMail12@domain.com";
     private final String testFirstName = "testFirstName";
     private final String testLastName = "testLastName";
-
     private final String testUpdatedFirstName = "updatedTestName";
 
     @Autowired

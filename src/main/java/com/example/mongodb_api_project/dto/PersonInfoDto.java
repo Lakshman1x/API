@@ -1,5 +1,4 @@
 package com.example.mongodb_api_project.dto;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -15,7 +14,6 @@ public class PersonInfoDto {
     @Size(min = 5, max = 100, message = "email size must be between 3 and 100")
     @Email(message = "Invalid email pattern")
     private String email;
-
 
     @NotBlank(message = "firstName can not be blank")
     @Size(min = 3, max = 25, message = "firstName size must be between 3 and 25")
@@ -44,5 +42,4 @@ public class PersonInfoDto {
     public String getEmail() {
         return this.email;
     }
-
 }

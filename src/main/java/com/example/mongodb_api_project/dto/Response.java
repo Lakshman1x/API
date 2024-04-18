@@ -1,8 +1,5 @@
 package com.example.mongodb_api_project.dto;
-
-
 import org.springframework.http.HttpStatus;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -18,7 +15,6 @@ public class Response {
         if (!Objects.isNull(message)) {
             this.message = message;
         }
-
     }
 
     public Response() {
@@ -55,5 +51,4 @@ public class Response {
     public void setStatus(HttpStatus status) {
         this.status = status;
     }
-
 }
