@@ -47,9 +47,8 @@ public class PersonControllerImpl implements IPersonController {
             logger.info("{} info retrieved", email);
             PersonEntity temp = person.get();
             return new ResponseEntity<>(new PersonInfoDto(temp.getEmail(), temp.getFirstName(), temp.getLastName()), HttpStatus.OK);
-        } else {
-            throw new MongoAPIException(HttpStatus.NOT_FOUND, "Person not found in Db");
         }
+        throw new MongoAPIException(HttpStatus.NOT_FOUND, "Person not found in Db");
     }
 
     @PostMapping()
@@ -61,17 +60,17 @@ public class PersonControllerImpl implements IPersonController {
     }
 
     @PutMapping()
-    public ResponseEntity<Response> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException {
+    public ResponseEntity<PersonEntity> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException {
         Validator.validate(result);
-        personService.updatePerson(userInput);
+        PersonEntity updatedPerson = personService.updatePerson(userInput);
         logger.info("Person information updated");
-        return new ResponseEntity<>(new Response(HttpStatus.OK, "Details updated"), HttpStatus.OK);
+        return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<Response> deletePerson(@PathVariable String email) throws MongoAPIException {
+    public ResponseEntity deletePerson(@PathVariable String email) throws MongoAPIException {
         personService.deletePerson(email);
         logger.info("{} information deleted", email);
-        return new ResponseEntity<>(new Response(HttpStatus.NO_CONTENT, "Person information deleted"), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

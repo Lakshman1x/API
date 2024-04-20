@@ -7,11 +7,11 @@ import com.example.mongodb_api_project.exception_handler.MongoAPIException;
 import java.util.Optional;
 
 public interface IPersonService {
-    Optional<PersonEntity> getPerson(String name);
+    Optional<PersonEntity> getPerson(String mail);
 
     void addPerson(PersonInfoDto person) throws MongoAPIException;
 
-    void updatePerson(PersonInfoDto person) throws MongoAPIException;
+    PersonEntity updatePerson(PersonInfoDto person) throws MongoAPIException;
 
     void deletePerson(String mail) throws MongoAPIException;
 

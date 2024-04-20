@@ -7,7 +7,6 @@ import com.example.mongodb_api_project.repo.IPersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -32,14 +31,12 @@ public class PersonServicesImpl implements IPersonService {
         throw new MongoAPIException(HttpStatus.BAD_REQUEST, "Person with same email already exists");
     }
 
-
-    public void updatePerson(PersonInfoDto person) throws MongoAPIException {
+    public PersonEntity updatePerson(PersonInfoDto person) throws MongoAPIException {
         Optional<PersonEntity> existingPerson = personRepository.findById(person.getEmail());
         if (existingPerson.isPresent()) {
-            personRepository.save(convertToPerson(person));
-            return;
+            return personRepository.save(convertToPerson(person));
         }
-        throw new MongoAPIException(HttpStatus.NOT_MODIFIED, "Not updated, Person not found in the database, ");
+        throw new MongoAPIException(HttpStatus.BAD_REQUEST, "Not updated, Person not found in the database, ");
     }
 
     public void deletePerson(String mail) throws MongoAPIException {

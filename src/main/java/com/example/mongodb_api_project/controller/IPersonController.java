@@ -20,9 +20,9 @@ public interface IPersonController {
 
     ResponseEntity<Response> addPerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
 
-    ResponseEntity<Response> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
+    ResponseEntity<PersonEntity> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
 
-    ResponseEntity<Response> deletePerson(String mail) throws ValidationException, MongoAPIException;
+    ResponseEntity deletePerson(String mail) throws ValidationException, MongoAPIException;
 
 
 }

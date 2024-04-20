@@ -15,15 +15,16 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MongoAPIException.class)
-    public ResponseEntity<Response> handlePersonNotInDbException(MongoAPIException ex) {
+    public ResponseEntity<Response> handleMongoAPIException(MongoAPIException ex) {
         Response response = new Response(ex.getStatusCode(), ex.getMessage());
-        logger.warn(ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        logger.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(response, ex.getStatusCode());
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Response> handleValidationException(ValidationException ex) {
         Response response = new Response(HttpStatus.BAD_REQUEST, "Validation error : ");
+        logger.error("Person Entity validation failed");
         for (FieldError err : ex.getBindingResult().getFieldErrors()) {
             response.appendMessage(err.getDefaultMessage());
             logger.warn(err.getDefaultMessage());
@@ -33,14 +34,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MongoException.class)
     public ResponseEntity<Response> handleMongoException(MongoException ex) {
-
         Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR, "MongoDB error occurred");
+        logger.error(ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response> handleException(Exception ex) {
         Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+        logger.error(ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

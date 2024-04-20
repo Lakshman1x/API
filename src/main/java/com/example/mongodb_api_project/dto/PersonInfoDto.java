@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class PersonInfoDto {
 
-    @NotBlank(message = "Email cant be blank")
+    @NotBlank(message = "Email can not be blank")
     @Size(min = 5, max = 100, message = "email size must be between 3 and 100")
     @Email(message = "Invalid email pattern")
     private String email;
