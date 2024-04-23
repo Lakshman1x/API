@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MongoException.class)
     public ResponseEntity<Response> handleMongoException(MongoException ex) {
-        Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR, "MongoDB error occurred");
+        Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR, "Some error occurred. Please contact support");
         logger.error(ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }

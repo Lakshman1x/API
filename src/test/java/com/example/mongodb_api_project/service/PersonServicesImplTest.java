@@ -12,15 +12,16 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static com.example.mongodb_api_project.testdata.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 class PersonServicesImplTest {
-    String sampleEmail = "sampleTestMail@domain.com";
-    String sampleFirstName = "samplefirstname";
-    String sampleLastName = "samplelastname";
+
     @Mock
     private IPersonRepo personRepo;
 
@@ -32,15 +33,16 @@ class PersonServicesImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        personEntity = new PersonEntity(sampleEmail, sampleFirstName, sampleLastName);
-        personInfoDto = new PersonInfoDto(sampleEmail, sampleFirstName, sampleLastName);
+        personEntity = new PersonEntity(SAMPLE_EMAIL, SAMPLE_FIRSTNAME, SAMPLE_LASTNAME);
+        personInfoDto = new PersonInfoDto(SAMPLE_EMAIL, SAMPLE_FIRSTNAME, SAMPLE_LASTNAME);
     }
 
     @Test
     void testGetPerson() {
+        Optional<PersonInfoDto> optionalPersonInfoDto = Optional.of(personInfoDto);
         Optional<PersonEntity> optionalPersonEntity = Optional.of(personEntity);
         when(personRepo.findById(any())).thenReturn(optionalPersonEntity);
-        assertEquals(personServices.getPerson(sampleEmail), optionalPersonEntity);
+        assertEquals(personServices.getPerson(SAMPLE_EMAIL), optionalPersonInfoDto);
     }
 
     @Test
@@ -59,8 +61,8 @@ class PersonServicesImplTest {
     @Test
     void testDeletePerson() throws MongoAPIException {
         when(personRepo.findById(any())).thenReturn(Optional.of(personEntity));
-        personServices.deletePerson(sampleEmail);
-        verify(personRepo, times(1)).deleteById(sampleEmail);
+        personServices.deletePerson(SAMPLE_EMAIL);
+        verify(personRepo, times(1)).deleteById(SAMPLE_EMAIL);
     }
 
     @Test
@@ -78,6 +80,6 @@ class PersonServicesImplTest {
     @Test
     void testDeletePersonThrowsException() {
         when(personRepo.findById(any())).thenReturn(Optional.empty());
-        assertThrows(MongoAPIException.class, () -> personServices.deletePerson(sampleEmail));
+        assertThrows(MongoAPIException.class, () -> personServices.deletePerson(SAMPLE_EMAIL));
     }
 }

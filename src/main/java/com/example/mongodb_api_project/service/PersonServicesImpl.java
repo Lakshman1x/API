@@ -5,8 +5,11 @@ import com.example.mongodb_api_project.entity.PersonEntity;
 import com.example.mongodb_api_project.exception_handler.MongoAPIException;
 import com.example.mongodb_api_project.repo.IPersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -19,8 +22,9 @@ public class PersonServicesImpl implements IPersonService {
         this.personRepository = repo;
     }
 
-    public Optional<PersonEntity> getPerson(String email) {
-        return personRepository.findById(email);
+    public Optional<PersonInfoDto> getPerson(String email) {
+        Optional<PersonEntity> foundPerson = personRepository.findById(email);
+        return foundPerson.map(this::convertToPersonInfoDto);
     }
 
     public void addPerson(PersonInfoDto person) throws MongoAPIException {
@@ -36,7 +40,7 @@ public class PersonServicesImpl implements IPersonService {
         if (existingPerson.isPresent()) {
             return personRepository.save(convertToPerson(person));
         }
-        throw new MongoAPIException(HttpStatus.BAD_REQUEST, "Not updated, Person not found in the database, ");
+        throw new MongoAPIException(HttpStatus.NOT_FOUND, "Not updated, Person not found in the database, ");
     }
 
     public void deletePerson(String mail) throws MongoAPIException {
@@ -48,7 +52,23 @@ public class PersonServicesImpl implements IPersonService {
         throw new MongoAPIException(HttpStatus.NOT_FOUND, "No person with that email found");
     }
 
+    @Override
+    public Page<PersonInfoDto> getList(Pageable page){
+        return convertToPersonInfoDto(personRepository.findAll(page));
+    }
+
+
     private PersonEntity convertToPerson(PersonInfoDto input) {
         return new PersonEntity(input.getEmail(), input.getFirstName(), input.getLastName());
     }
+
+    private PersonInfoDto convertToPersonInfoDto(PersonEntity entity){
+        return new PersonInfoDto(entity.getEmail(),entity.getFirstName(), entity.getLastName());
+    }
+
+    private Page<PersonInfoDto> convertToPersonInfoDto(Page<PersonEntity> list){
+        return list.map(personEntity ->
+                new PersonInfoDto(personEntity.getEmail(), personEntity.getFirstName(), personEntity.getFirstName()));
+    }
+
 }
