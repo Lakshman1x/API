@@ -80,7 +80,7 @@ class PersonControllerImplTest {
 
     @Test
     void testDeletePerson() throws MongoAPIException {
-        ResponseEntity response = personController.deletePerson(SAMPLE_EMAIL);
+        ResponseEntity<Void> response = personController.deletePerson(SAMPLE_EMAIL);
         verify(personService, times(1)).deletePerson(SAMPLE_EMAIL);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }

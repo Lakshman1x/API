@@ -53,7 +53,7 @@ public class PersonServicesImpl implements IPersonService {
     }
 
     @Override
-    public Page<PersonInfoDto> getList(Pageable page){
+    public Page<PersonInfoDto> getList(Pageable page) {
         return convertToPersonInfoDto(personRepository.findAll(page));
     }
 
@@ -62,13 +62,11 @@ public class PersonServicesImpl implements IPersonService {
         return new PersonEntity(input.getEmail(), input.getFirstName(), input.getLastName());
     }
 
-    private PersonInfoDto convertToPersonInfoDto(PersonEntity entity){
-        return new PersonInfoDto(entity.getEmail(),entity.getFirstName(), entity.getLastName());
+    private PersonInfoDto convertToPersonInfoDto(PersonEntity entity) {
+        return new PersonInfoDto(entity.getEmail(), entity.getFirstName(), entity.getLastName());
     }
 
-    private Page<PersonInfoDto> convertToPersonInfoDto(Page<PersonEntity> list){
-        return list.map(personEntity ->
-                new PersonInfoDto(personEntity.getEmail(), personEntity.getFirstName(), personEntity.getFirstName()));
+    private Page<PersonInfoDto> convertToPersonInfoDto(Page<PersonEntity> list) {
+        return list.map(this::convertToPersonInfoDto);
     }
-
 }

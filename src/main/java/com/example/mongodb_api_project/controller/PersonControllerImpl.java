@@ -75,7 +75,7 @@ public class PersonControllerImpl implements IPersonController {
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity deletePerson(@PathVariable String email) throws MongoAPIException {
+    public ResponseEntity<Void> deletePerson(@PathVariable String email) throws MongoAPIException {
         personService.deletePerson(email);
         logger.info("{} information deleted", email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

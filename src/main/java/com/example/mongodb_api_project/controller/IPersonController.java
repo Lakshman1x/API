@@ -21,7 +21,7 @@ public interface IPersonController {
 
     ResponseEntity<PersonEntity> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException;
 
-    ResponseEntity deletePerson(String mail) throws ValidationException, MongoAPIException;
+    ResponseEntity<Void> deletePerson(String mail) throws ValidationException, MongoAPIException;
 
 
 }
