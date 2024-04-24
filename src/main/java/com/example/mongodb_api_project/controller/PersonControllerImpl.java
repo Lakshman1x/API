@@ -42,12 +42,15 @@ public class PersonControllerImpl implements IPersonController {
         this.personService = services;
     }
 
+    @Override
     @GetMapping("/list")
-    public ResponseEntity<Page<PersonInfoDto>> getList(@RequestParam(defaultValue = "10",required = false) int size, @RequestParam(defaultValue = "1",required = false) int page){
+    public ResponseEntity<Page<PersonInfoDto>> getList(@RequestParam(defaultValue = "10",required = false) int size,
+                                                       @RequestParam(defaultValue = "0",required = false) int page){
         Pageable p = PageRequest.of(page, size);
         return new ResponseEntity<>(personService.getList(p),HttpStatus.OK);
     }
 
+    @Override
     @GetMapping("/{email}")
     public ResponseEntity<PersonInfoDto> getPerson(@PathVariable("email") String email) throws MongoAPIException {
         Optional<PersonInfoDto> person = personService.getPerson(email);
@@ -58,22 +61,27 @@ public class PersonControllerImpl implements IPersonController {
         throw new MongoAPIException(HttpStatus.NOT_FOUND, "Person not found in Db");
     }
 
+    @Override
     @PostMapping()
-    public ResponseEntity<String> addPerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException {
+    public ResponseEntity<String> addPerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result)
+            throws ValidationException, MongoAPIException {
         Validator.validate(result);
         personService.addPerson(userInput);
         logger.info("New person added successfully");
         return new ResponseEntity<>("Person added to database", HttpStatus.CREATED);
     }
 
+    @Override
     @PutMapping()
-    public ResponseEntity<PersonEntity> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result) throws ValidationException, MongoAPIException {
+    public ResponseEntity<PersonEntity> updatePerson(@RequestBody @Valid PersonInfoDto userInput, BindingResult result)
+            throws ValidationException, MongoAPIException {
         Validator.validate(result);
         PersonEntity updatedPerson = personService.updatePerson(userInput);
         logger.info("Person information updated");
         return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
     }
 
+    @Override
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deletePerson(@PathVariable String email) throws MongoAPIException {
         personService.deletePerson(email);

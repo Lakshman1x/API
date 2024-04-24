@@ -9,13 +9,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
 import java.util.Optional;
 
-import static com.example.mongodb_api_project.testdata.TestConstants.*;
+import static com.example.mongodb_api_project.testdata.TestConstants.SAMPLE_FIRSTNAME;
+import static com.example.mongodb_api_project.testdata.TestConstants.SAMPLE_LASTNAME;
+import static com.example.mongodb_api_project.testdata.TestConstants.SAMPLE_EMAIL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -35,6 +42,15 @@ class PersonServicesImplTest {
         MockitoAnnotations.openMocks(this);
         personEntity = new PersonEntity(SAMPLE_EMAIL, SAMPLE_FIRSTNAME, SAMPLE_LASTNAME);
         personInfoDto = new PersonInfoDto(SAMPLE_EMAIL, SAMPLE_FIRSTNAME, SAMPLE_LASTNAME);
+    }
+
+    @Test
+    void testGetList(){
+        Page<PersonEntity> sample = new PageImpl<>(Collections.singletonList(personEntity));
+        Page<PersonInfoDto> expected = new PageImpl<>(Collections.singletonList(personInfoDto));
+        when(personRepo.findAll(any(Pageable.class))).thenReturn(sample);
+        Page<PersonInfoDto> result =personServices.getList(mock(Pageable.class));
+        assertEquals(result,expected);
     }
 
     @Test

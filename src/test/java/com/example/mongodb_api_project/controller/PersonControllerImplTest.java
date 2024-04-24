@@ -16,14 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import static com.example.mongodb_api_project.testdata.TestConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.example.mongodb_api_project.testdata.TestConstants.SAMPLE_EMAIL;
+import static com.example.mongodb_api_project.testdata.TestConstants.SAMPLE_FIRSTNAME;
+import static com.example.mongodb_api_project.testdata.TestConstants.SAMPLE_LASTNAME;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -49,10 +49,10 @@ class PersonControllerImplTest {
 
     @Test
     void testGetList() {
-        List<PersonInfoDto> personList = new ArrayList<>();
-        personList.add(personInfoDto);
+        List<PersonInfoDto> personList = Collections.singletonList(personInfoDto);
         when(personService.getList(any())).thenReturn(new PageImpl<>(personList));
         ResponseEntity<Page<PersonInfoDto>> responseEntity = personController.getList(10,0);
+        assertNotNull(responseEntity.getBody());
         assertEquals(personList, responseEntity.getBody().getContent());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
@@ -61,7 +61,8 @@ class PersonControllerImplTest {
     void testGetPerson() throws MongoAPIException {
         when(personService.getPerson(any())).thenReturn(Optional.of(personInfoDto));
         ResponseEntity<PersonInfoDto> response = personController.getPerson(SAMPLE_EMAIL);
-        assertEquals(SAMPLE_EMAIL, Objects.requireNonNull(response.getBody()).getEmail());
+        assertNotNull(response.getBody());
+        assertEquals(SAMPLE_EMAIL, response.getBody().getEmail());
     }
 
     @Test
@@ -99,7 +100,8 @@ class PersonControllerImplTest {
 
     @Test
     void testUpdatePersonThrowsMongoAPIException() throws MongoAPIException {
-        when(personService.updatePerson(any())).thenThrow(new MongoAPIException(HttpStatus.BAD_REQUEST, "Not updated, Person not found in the database, "));
+        when(personService.updatePerson(any())).thenThrow(new MongoAPIException
+                (HttpStatus.BAD_REQUEST, "Not updated, Person not found in the database, "));
         assertThrows(MongoAPIException.class, () -> personController.updatePerson(personInfoDto, bindingResult));
     }
 
@@ -108,7 +110,6 @@ class PersonControllerImplTest {
         doThrow(MongoAPIException.class).when(personService).deletePerson(any());
         assertThrows(MongoAPIException.class, () -> personController.deletePerson(SAMPLE_EMAIL));
     }
-
 
     @Test
     void testAddPersonThrowsValidationException() throws MongoAPIException {

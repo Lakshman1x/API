@@ -22,11 +22,13 @@ public class PersonServicesImpl implements IPersonService {
         this.personRepository = repo;
     }
 
+    @Override
     public Optional<PersonInfoDto> getPerson(String email) {
         Optional<PersonEntity> foundPerson = personRepository.findById(email);
         return foundPerson.map(this::convertToPersonInfoDto);
     }
 
+    @Override
     public void addPerson(PersonInfoDto person) throws MongoAPIException {
         if (!personRepository.existsById(person.getEmail())) {
             personRepository.save(convertToPerson(person));
@@ -35,6 +37,7 @@ public class PersonServicesImpl implements IPersonService {
         throw new MongoAPIException(HttpStatus.BAD_REQUEST, "Person with same email already exists");
     }
 
+   @Override
     public PersonEntity updatePerson(PersonInfoDto person) throws MongoAPIException {
         Optional<PersonEntity> existingPerson = personRepository.findById(person.getEmail());
         if (existingPerson.isPresent()) {
@@ -43,6 +46,7 @@ public class PersonServicesImpl implements IPersonService {
         throw new MongoAPIException(HttpStatus.NOT_FOUND, "Not updated, Person not found in the database, ");
     }
 
+    @Override
     public void deletePerson(String mail) throws MongoAPIException {
         Optional<PersonEntity> existingPerson = personRepository.findById(mail);
         if (existingPerson.isPresent()) {
@@ -56,7 +60,6 @@ public class PersonServicesImpl implements IPersonService {
     public Page<PersonInfoDto> getList(Pageable page) {
         return convertToPersonInfoDto(personRepository.findAll(page));
     }
-
 
     private PersonEntity convertToPerson(PersonInfoDto input) {
         return new PersonEntity(input.getEmail(), input.getFirstName(), input.getLastName());
