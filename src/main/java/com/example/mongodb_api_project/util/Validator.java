@@ -1,6 +1,6 @@
-package com.example.mongo_api.util;
+package com.example.mongodb_api_project.util;
 
-import com.example.mongo_api.exception_handler.ValidationException;
+import com.example.mongodb_api_project.exception_handler.ValidationException;
 import org.springframework.validation.BindingResult;
 
 

@@ -1,5 +1,4 @@
-package com.example.mongo_api.dto;
-
+package com.example.mongodb_api_project.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,11 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class PersonInfoDto {
 
-    @NotBlank(message = "Email cant be blank")
-    @Size(min=5,max=100,message = "email size must be between 3 and 100")
+    @NotBlank(message = "Email can not be blank")
+    @Size(min = 5, max = 100, message = "email size must be between 3 and 100")
     @Email(message = "Invalid email pattern")
     private String email;
-
 
     @NotBlank(message = "firstName can not be blank")
     @Size(min = 3, max = 25, message = "firstName size must be between 3 and 25")
@@ -28,7 +26,7 @@ public class PersonInfoDto {
     private String lastName;
 
     public PersonInfoDto(String email, String firstName, String lastName) {
-        this.email=email;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -40,6 +38,8 @@ public class PersonInfoDto {
     public String getLastName() {
         return this.lastName;
     }
-    public String getEmail(){return  this.email;}
 
+    public String getEmail() {
+        return this.email;
+    }
 }
